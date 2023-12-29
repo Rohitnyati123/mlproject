@@ -1,17 +1,18 @@
+import pandas as pd
+import numpy as np
 import os
 import sys
-from importmonkey import add_path
-add_path("../src")
-import exception
-# from src.exception import CustomException
-from logger import logging
-import pandas as pd
+sys.path.insert(0, '/src')
+from src1.logger import logging
+from src1.exception import CustomException
 from sklearn.model_selection import train_test_split
+from data_transformation import DataTransformation
 from dataclasses import dataclass
+from model_trainer import ModelTrainer
 
 @dataclass #by using decorator we will be able to define the variable
 class DataIngetionConfig:
-    train_data_path:str=os.path.join('artifacts','train.csv')
+    train_data_path:str=os.path.join("artifacts","train.csv")
     test_data_path:str=os.path.join('artifacts','test.csv')
     raw_data_path:str=os.path.join('artifacts','data.csv')
 
@@ -44,5 +45,8 @@ if __name__=="__main__":
     obj=DataIngestion()
     train_data,test_data=obj.initiate_data_ingestion()
 
-    # data_transformation=DataTransformation()
-    # train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)x
+    data_transformation=DataTransformation()
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+    
+    model_trainer=ModelTrainer()
+    print(model_trainer.initiate_model_trainer(train_arr,test_arr))
